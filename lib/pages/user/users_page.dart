@@ -9,9 +9,11 @@ class UserPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(itemBuilder: (BuildContext context, int index) {
-        return const UserItem();
-      }),
+      body: ListView.builder(
+          itemCount: 10, //TODO chage to real data
+          itemBuilder: (BuildContext context, int index) {
+            return const UserItem();
+          }),
     );
   }
 }

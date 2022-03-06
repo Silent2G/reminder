@@ -14,6 +14,6 @@ class UserItem extends StatefulWidget {
 class _UserItemState extends State<UserItem> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Text("Soldier item");
   }
 }

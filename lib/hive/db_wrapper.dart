@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:reminder/constants.dart';
 import 'package:reminder/models/user.dart';
 
 import '../models/users_holder.dart';
@@ -15,13 +14,8 @@ class DbWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: Hive.initFlutter(),
-        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-          Hive.box(Constants.boxKey);
-          Hive.registerAdapter(UserAdapter());
-          Hive.registerAdapter(UsersHolderAdapter());
-          return child;
-        });
+    // Hive.registerAdapter(UserAdapter());
+    // Hive.registerAdapter(UsersHolderAdapter());
+    return child;
   }
 }
