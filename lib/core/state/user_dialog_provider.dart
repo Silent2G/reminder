@@ -45,11 +45,12 @@ class UserDialogProvider with ChangeNotifier {
   bool validateFields() {
     bool result = false;
     if (soldierStatus == SoldierStatus.free) {
-      if (soldierNumber != null) {
+      if (soldierNumber != null && soldierNumber!.isNotEmpty) {
         result = true;
       }
     } else if (soldierStatus == SoldierStatus.onDuty) {
       if (soldierNumber != null &&
+          soldierNumber!.isNotEmpty &&
           soldierStatus != SoldierStatus.none &&
           soldierHours != null &&
           soldierHours! > 0 &&
@@ -122,12 +123,14 @@ class UserDialogProvider with ChangeNotifier {
   Function(String) getOnChangedFunctionNumber() {
     return (String value) {
       soldierNumber = value;
+      notifyListeners();
     };
   }
 
   Function(String) getOnChangedFunctionHours() {
     return (String value) {
       soldierHours = int.tryParse(value);
+      notifyListeners();
     };
   }
 }
