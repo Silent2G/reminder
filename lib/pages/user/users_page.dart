@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reminder/core/state/user_page_provider.dart';
 import 'package:reminder/dialogs/add_user_dialog/add_user_gialog.dart';
 import 'package:reminder/pages/user/components/user_item.dart';
 
@@ -18,9 +17,18 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
+  late UserDialogProvider userDialogNotifier;
+
+  @override
+  void initState() {
+    userDialogNotifier = context.read<UserDialogProvider>();
+    userDialogNotifier.getUsers();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserPageProvider>(
+    return Consumer<UserDialogProvider>(
       builder: (_, notifier, __) {
         return Scaffold(
           appBar: AppBar(
@@ -35,8 +43,8 @@ class _UserPageState extends State<UserPage> {
                 onPressed: () {
                   showDialog<void>(
                     context: context,
-                    builder: (_) => ChangeNotifierProvider(
-                      create: (_) => UserDialogProvider(),
+                    builder: (_) => ChangeNotifierProvider.value(
+                      value: userDialogNotifier,
                       child: const AddUserDialog(),
                     ),
                     // builder: (BuildContext context) => const AddUserDialog(),
@@ -55,17 +63,18 @@ class _UserPageState extends State<UserPage> {
                   })
               : const Center(
                   child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  child: Text(
-                    "Будь ласка, додайте бійця (натисніть на плюсик вверху)",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontStyle: FontStyle.normal,
-                      fontWeight: FontWeight.w600,
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child: Text(
+                      "Будь ласка, додайте бійця (натисніть на плюсик вверху)",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontStyle: FontStyle.normal,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
-                )),
+                ),
         );
       },
     );

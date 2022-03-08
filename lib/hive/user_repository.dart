@@ -8,7 +8,8 @@ class UserRepository {
   Future<List<User>> getAllUsers() async {
     final box = await Hive.openBox(Constants.boxKey);
 
-    final UsersHolder result = box.get(Constants.usersHolderKey);
+    final UsersHolder result =
+        box.get(Constants.usersHolderKey, defaultValue: UsersHolder(users: []));
 
     return result.users;
   }
@@ -35,11 +36,11 @@ class UserRepository {
 
   Future<void> addUserToDb(User user) async {
     final box = await Hive.openBox(Constants.boxKey);
-    final UsersHolder holder = box.get(Constants.usersHolderKey);
+    final UsersHolder holder =
+        box.get(Constants.usersHolderKey, defaultValue: UsersHolder(users: []));
 
     holder.users.add(user);
-
-    box.put(Constants.usersHolderKey, user);
+    holder.save();
   }
 
   Future<void> updateUser(User value) async {

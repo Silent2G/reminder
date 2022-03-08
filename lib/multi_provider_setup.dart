@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'core/state/user_dialog_provider.dart';
-import 'core/state/user_page_provider.dart';
 
 class MultiProviderSetup extends StatelessWidget {
   const MultiProviderSetup({Key? key, required this.child}) : super(key: key);
@@ -13,7 +12,7 @@ class MultiProviderSetup extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => UserPageProvider()),
+        ChangeNotifierProvider(create: (_) => UserDialogProvider()),
       ],
       child: child,
     );

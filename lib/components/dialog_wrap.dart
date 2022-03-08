@@ -23,7 +23,7 @@ class DialogWrap extends StatelessWidget {
       child: SingleChildScrollView(
         controller: ScrollController(),
         child: SizedBox(
-          height: MediaQuery.of(context).size.height - 120,
+          height: 500,
           child: child,
         ),
       ),

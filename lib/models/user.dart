@@ -53,4 +53,9 @@ class User extends HiveObject {
       lastDutyPeriod: lastDutyPeriod ?? this.lastDutyPeriod,
     );
   }
+
+  @override
+  String toString() {
+    return 'User{id: $id, title: $title, onDuty: $onDuty, startDutyTime: $startDutyTime, endDutyTime: $endDutyTime, allDutyHours: $allDutyHours, lastDutyPeriod: $lastDutyPeriod}';
+  }
 }
