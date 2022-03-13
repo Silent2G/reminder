@@ -1,11 +1,12 @@
 import 'package:hive/hive.dart';
+import 'package:reminder/pages/user/components/time_soldier_status.dart';
 
 part 'user.g.dart';
 
 @HiveType(typeId: 1)
 class User extends HiveObject {
   @HiveField(0)
-  int id;
+  final int id;
 
   @HiveField(1)
   String title;
@@ -25,6 +26,8 @@ class User extends HiveObject {
   @HiveField(6)
   int lastDutyPeriod;
 
+  TimeSoldierStatus? status;
+
   User(
       {required this.id,
       required this.title,
@@ -32,7 +35,8 @@ class User extends HiveObject {
       required this.startDutyTime,
       required this.endDutyTime,
       required this.allDutyHours,
-      required this.lastDutyPeriod});
+      required this.lastDutyPeriod,
+      this.status});
 
   User copyWith({
     int? id,
@@ -42,20 +46,21 @@ class User extends HiveObject {
     DateTime? endDutyTime,
     int? allDutyHours,
     int? lastDutyPeriod,
+    TimeSoldierStatus? status,
   }) {
     return User(
-      id: this.id,
-      title: title ?? this.title,
-      onDuty: onDuty ?? this.onDuty,
-      startDutyTime: startDutyTime ?? this.startDutyTime,
-      endDutyTime: endDutyTime ?? this.endDutyTime,
-      allDutyHours: allDutyHours ?? this.allDutyHours,
-      lastDutyPeriod: lastDutyPeriod ?? this.lastDutyPeriod,
-    );
+        id: this.id,
+        title: title ?? this.title,
+        onDuty: onDuty ?? this.onDuty,
+        startDutyTime: startDutyTime ?? this.startDutyTime,
+        endDutyTime: endDutyTime ?? this.endDutyTime,
+        allDutyHours: allDutyHours ?? this.allDutyHours,
+        lastDutyPeriod: lastDutyPeriod ?? this.lastDutyPeriod,
+        status: status ?? this.status);
   }
 
   @override
   String toString() {
-    return 'User{id: $id, title: $title, onDuty: $onDuty, startDutyTime: $startDutyTime, endDutyTime: $endDutyTime, allDutyHours: $allDutyHours, lastDutyPeriod: $lastDutyPeriod}';
+    return 'User{id: $id, title: $title, onDuty: $onDuty, startDutyTime: $startDutyTime, endDutyTime: $endDutyTime, allDutyHours: $allDutyHours, lastDutyPeriod: $lastDutyPeriod, status: $status}';
   }
 }

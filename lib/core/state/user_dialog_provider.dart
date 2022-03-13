@@ -17,8 +17,8 @@ class UserDialogProvider with ChangeNotifier {
 
   List<User> users = [];
 
-  void getUsers() async {
-    users = await UserRepository().getAllUsers();
+  Future<void> getUsers() async {
+    users = await UserRepository().getSortedUsers();
     notifyListeners();
   }
 
@@ -104,7 +104,7 @@ class UserDialogProvider with ChangeNotifier {
     await UserRepository().addUserToDb(user);
 
     // update soldiers list
-    users = await UserRepository().getAllUsers();
+    users = await UserRepository().getSortedUsers();
   }
 
   void clearVariables() {
