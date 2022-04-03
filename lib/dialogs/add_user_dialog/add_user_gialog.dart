@@ -54,6 +54,9 @@ class _AddUserDialogState extends State<AddUserDialog> {
     );
     return DialogWrap(
       child: BackWrap(
+        voidCallback: () {
+          userProvider.clearVariables();
+        },
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Column(

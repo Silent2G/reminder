@@ -26,6 +26,9 @@ class User extends HiveObject {
   @HiveField(6)
   int lastDutyPeriod;
 
+  @HiveField(7)
+  int dutyCounter;
+
   TimeSoldierStatus? status;
 
   User(
@@ -36,6 +39,7 @@ class User extends HiveObject {
       required this.endDutyTime,
       required this.allDutyHours,
       required this.lastDutyPeriod,
+      required this.dutyCounter,
       this.status});
 
   User copyWith({
@@ -46,6 +50,7 @@ class User extends HiveObject {
     DateTime? endDutyTime,
     int? allDutyHours,
     int? lastDutyPeriod,
+    int? dutyCounter,
     TimeSoldierStatus? status,
   }) {
     return User(
@@ -56,11 +61,12 @@ class User extends HiveObject {
         endDutyTime: endDutyTime ?? this.endDutyTime,
         allDutyHours: allDutyHours ?? this.allDutyHours,
         lastDutyPeriod: lastDutyPeriod ?? this.lastDutyPeriod,
+        dutyCounter: dutyCounter ?? this.dutyCounter,
         status: status ?? this.status);
   }
 
   @override
   String toString() {
-    return 'User{id: $id, title: $title, onDuty: $onDuty, startDutyTime: $startDutyTime, endDutyTime: $endDutyTime, allDutyHours: $allDutyHours, lastDutyPeriod: $lastDutyPeriod, status: $status}';
+    return 'User{id: $id, title: $title, onDuty: $onDuty, startDutyTime: $startDutyTime, endDutyTime: $endDutyTime, allDutyHours: $allDutyHours, lastDutyPeriod: $lastDutyPeriod, dutyCounter: $dutyCounter, status: $status}';
   }
 }

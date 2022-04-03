@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:reminder/pages/home/home_page.dart';
 
 import '../models/user.dart';
 import '../models/users_holder.dart';
 import 'multi_provider_setup.dart';
-import 'pages/user/users_page.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -15,7 +15,7 @@ void main() async {
   runApp(
     const MaterialApp(
       home: MultiProviderSetup(
-        child: UserPage(),
+        child: HomePage(),
       ),
     ),
   );

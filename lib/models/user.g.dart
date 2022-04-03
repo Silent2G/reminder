@@ -24,13 +24,14 @@ class UserAdapter extends TypeAdapter<User> {
       endDutyTime: fields[4] as DateTime,
       allDutyHours: fields[5] as int,
       lastDutyPeriod: fields[6] as int,
+      dutyCounter: fields[7] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, User obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -44,7 +45,9 @@ class UserAdapter extends TypeAdapter<User> {
       ..writeByte(5)
       ..write(obj.allDutyHours)
       ..writeByte(6)
-      ..write(obj.lastDutyPeriod);
+      ..write(obj.lastDutyPeriod)
+      ..writeByte(7)
+      ..write(obj.dutyCounter);
   }
 
   @override

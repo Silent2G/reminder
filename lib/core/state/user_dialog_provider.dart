@@ -14,11 +14,14 @@ class UserDialogProvider with ChangeNotifier {
   int? soldierHours;
   DateTime? startDutyTime;
   DateTime? endDutyTime;
+  bool deleteLastDuty = false;
 
   List<User> users = [];
+  List<User> usersStatistic = [];
 
   Future<void> getUsers() async {
     users = await UserRepository().getSortedUsers();
+    usersStatistic = await UserRepository().getStatisticSortedUsers();
     notifyListeners();
   }
 
@@ -40,6 +43,10 @@ class UserDialogProvider with ChangeNotifier {
     startDutyTime = DateTime(
         now.year, now.month, now.day, timeOfDay.hour, timeOfDay.minute);
     notifyListeners();
+  }
+
+  bool validateNewDutyFields() {
+    return soldierHours != null && soldierHours! > 0 && startDutyTime != null;
   }
 
   bool validateFields() {
@@ -70,6 +77,42 @@ class UserDialogProvider with ChangeNotifier {
     return startDutyTime!.add(Duration(hours: soldierHours!));
   }
 
+  Future<void> changeLastUsersDutyAndSaveToDb(User user) async {
+    if (deleteLastDuty) {
+      user.onDuty = false;
+      user.startDutyTime = DateTime.now(); // don't know last data
+      user.endDutyTime = DateTime.now(); // don't know last data
+      user.allDutyHours = user.allDutyHours - user.lastDutyPeriod;
+      user.dutyCounter = user.dutyCounter - 1;
+      user.lastDutyPeriod = 0; // don't know last data
+    } else {
+      user.startDutyTime = startDutyTime!;
+      user.endDutyTime = generateEndDutyTime();
+      user.allDutyHours =
+          user.allDutyHours - user.lastDutyPeriod + soldierHours!;
+      user.lastDutyPeriod = soldierHours!;
+    }
+
+    await UserRepository().updateUser();
+
+    // update soldiers list
+    getUsers();
+  }
+
+  Future<void> addNewDutyToUserAndSaveToDb(User user) async {
+    user.onDuty = true;
+    user.startDutyTime = startDutyTime!;
+    user.endDutyTime = generateEndDutyTime();
+    user.allDutyHours = user.allDutyHours + soldierHours!;
+    user.lastDutyPeriod = soldierHours!;
+    user.dutyCounter = user.dutyCounter + 1;
+
+    await UserRepository().updateUser();
+
+    // update soldiers list
+    getUsers();
+  }
+
   Future<void> createUserAndSaveToDb() async {
     if (soldierStatus == SoldierStatus.none) {
       return;
@@ -79,24 +122,24 @@ class UserDialogProvider with ChangeNotifier {
 
     if (soldierStatus == SoldierStatus.free) {
       user = User(
-        id: Util().createRandomId(),
-        title: soldierNumber!,
-        onDuty: getOnDuty(),
-        startDutyTime: DateTime.now(), // ignore data
-        endDutyTime: DateTime.now(), // ignore data
-        allDutyHours: 0, // ignore data
-        lastDutyPeriod: 0, // ignore data
-      );
+          id: Util().createRandomId(),
+          title: soldierNumber!,
+          onDuty: getOnDuty(),
+          startDutyTime: DateTime.now(), // ignore data
+          endDutyTime: DateTime.now(), // ignore data
+          allDutyHours: 0, // ignore data
+          lastDutyPeriod: 0, // ignore data
+          dutyCounter: 0);
     } else {
       user = User(
-        id: Util().createRandomId(),
-        title: soldierNumber!,
-        onDuty: getOnDuty(),
-        startDutyTime: startDutyTime!,
-        endDutyTime: generateEndDutyTime(),
-        allDutyHours: 0,
-        lastDutyPeriod: soldierHours!,
-      );
+          id: Util().createRandomId(),
+          title: soldierNumber!,
+          onDuty: getOnDuty(),
+          startDutyTime: startDutyTime!,
+          endDutyTime: generateEndDutyTime(),
+          allDutyHours: soldierHours!,
+          lastDutyPeriod: soldierHours!,
+          dutyCounter: 1);
     }
 
     debugPrint(user.toString());
@@ -104,7 +147,7 @@ class UserDialogProvider with ChangeNotifier {
     await UserRepository().addUserToDb(user);
 
     // update soldiers list
-    users = await UserRepository().getSortedUsers();
+    getUsers();
   }
 
   void clearVariables() {
@@ -113,6 +156,7 @@ class UserDialogProvider with ChangeNotifier {
     soldierHours = null;
     startDutyTime = null;
     endDutyTime = null;
+    deleteLastDuty = false;
 
     clearFieldNumber();
     clearFieldHours();

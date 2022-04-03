@@ -5,9 +5,11 @@ class BackWrap extends StatelessWidget {
   const BackWrap({
     Key? key,
     required this.body,
+    this.voidCallback,
   }) : super(key: key);
 
   final Widget body;
+  final VoidCallback? voidCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,9 @@ class BackWrap extends StatelessWidget {
                 icon: SvgPicture.asset("assets/images/svg/back.svg"),
                 onPressed: () {
                   Navigator.of(context).pop();
+                  if (voidCallback != null) {
+                    voidCallback!();
+                  }
                 },
               ),
             ),

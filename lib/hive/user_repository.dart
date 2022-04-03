@@ -41,6 +41,13 @@ class UserRepository {
     return sortedUsers;
   }
 
+  Future<List<User>> getStatisticSortedUsers() async {
+    final users = await getAllUsers();
+    users.sort((a, b) => b.allDutyHours.compareTo(a.allDutyHours));
+
+    return users;
+  }
+
   List<User> getUsersByTimeSolidersStatus(
       List<User> users, TimeSoldierStatus status) {
     List<User> result = [];
@@ -51,7 +58,7 @@ class UserRepository {
       }
     }
 
-    result.sort((a, b) => a.endDutyTime.compareTo(b.startDutyTime));
+    result.sort((a, b) => a.endDutyTime.compareTo(b.endDutyTime));
 
     return result;
   }
@@ -99,21 +106,11 @@ class UserRepository {
     holder.save();
   }
 
-  Future<void> updateUser(User value) async {
-    final User? user = await getUserById(value.id);
-
-    if (user != null) {
-      user.copyWith(
-        id: value.id,
-        title: value.title,
-        onDuty: value.onDuty,
-        startDutyTime: value.startDutyTime,
-        endDutyTime: value.endDutyTime,
-        allDutyHours: value.allDutyHours,
-        lastDutyPeriod: value.lastDutyPeriod,
-      );
-      user.save();
-    }
+  Future<void> updateUser() async {
+    final box = await Hive.openBox(Constants.boxKey);
+    final UsersHolder holder =
+        box.get(Constants.usersHolderKey, defaultValue: UsersHolder(users: []));
+    holder.save();
   }
 
   TimeSoldierStatus checkDutyStatus(User user) {

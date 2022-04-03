@@ -7,6 +7,7 @@ class AppTextInput extends StatelessWidget {
   final TextStyle? textStyle;
   final Function(String)? onChanged;
   final TextInputType? keyboardType;
+  final String? initialValue;
 
   const AppTextInput({
     Key? key,
@@ -16,6 +17,7 @@ class AppTextInput extends StatelessWidget {
     this.textStyle,
     this.onChanged,
     this.keyboardType,
+    this.initialValue,
   }) : super(key: key);
 
   @override
@@ -23,6 +25,7 @@ class AppTextInput extends StatelessWidget {
     return TextFormField(
       controller: controller,
       enabled: enabled ?? false,
+      initialValue: initialValue,
       keyboardType: keyboardType ?? TextInputType.text,
       onChanged: onChanged,
       style: textStyle ??
@@ -31,7 +34,6 @@ class AppTextInput extends StatelessWidget {
             color: Colors.white,
           ),
       textAlign: TextAlign.left,
-      // cursorColor: Colors.white,
       decoration: decoration ??
           const InputDecoration(
               border: InputBorder.none,

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../components/color_button.dart';
 import '../../../core/state/user_dialog_provider.dart';
+import '../../../dialogs/change_duty_dialog.dart/change_duty_dialog.dart';
 import '../../../hive/user_repository.dart';
 import '../../../models/user.dart';
 import 'data_pair.dart';
@@ -37,7 +38,11 @@ class UserItemWaiting extends StatelessWidget {
                 value: "В очікуванні",
               ),
               DataPair(
-                title: "Кількість годин чергування:",
+                title: "Кількісь змін:",
+                value: user.dutyCounter.toString(),
+              ),
+              DataPair(
+                title: "Кількість годин поточного чергування:",
                 value: user.lastDutyPeriod.toString(),
               ),
               DataPair(
@@ -50,13 +55,37 @@ class UserItemWaiting extends StatelessWidget {
                 value:
                     DateFormat('yyyy-MM-dd – kk:mm').format(user.endDutyTime),
               ),
-              ColorButton(
-                title: "Видалити",
-                color: Colors.blue,
-                function: () async {
-                  await UserRepository().deleteUserFromDB(user);
-                  context.read<UserDialogProvider>().getUsers();
-                },
+              Row(
+                children: [
+                  Expanded(
+                    child: ColorButton(
+                      title: "Видалити",
+                      color: Colors.blue,
+                      function: () async {
+                        await UserRepository().deleteUserFromDB(user);
+                        context.read<UserDialogProvider>().getUsers();
+                      },
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: ColorButton(
+                      title: "Змінити",
+                      color: Colors.blue,
+                      function: () async {
+                        await showDialog<void>(
+                          context: context,
+                          builder: (_) => ChangeNotifierProvider.value(
+                            value: context.read<UserDialogProvider>(),
+                            child: ChangeDutyDialog(user: user),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                ],
               )
             ],
           ),

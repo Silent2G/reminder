@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class DialogWrap extends StatelessWidget {
   final Widget? child;
   final double? borderRadius;
+  final double? height;
 
   const DialogWrap({
     Key? key,
     required this.child,
     this.borderRadius,
+    this.height,
   }) : super(key: key);
 
   @override
@@ -23,7 +25,7 @@ class DialogWrap extends StatelessWidget {
       child: SingleChildScrollView(
         controller: ScrollController(),
         child: SizedBox(
-          height: 500,
+          height: height ?? 500,
           child: child,
         ),
       ),

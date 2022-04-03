@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reminder/core/state/user_dialog_provider.dart';
+import 'package:reminder/dialogs/add_duty_dialog/add_duty_dialog.dart';
 import 'package:reminder/hive/user_repository.dart';
 
 import '../../../components/color_button.dart';
@@ -38,6 +39,10 @@ class UserItemFree extends StatelessWidget {
                 value: "Вільний",
               ),
               DataPair(
+                title: "Кількісь змін:",
+                value: user.dutyCounter.toString(),
+              ),
+              DataPair(
                   title: "Боєць відпочиває:",
                   value: notifier.calculateSoldierRestTime(user)),
               user.lastDutyPeriod > 0
@@ -45,13 +50,37 @@ class UserItemFree extends StatelessWidget {
                       title: "Тривалість останнього чергування:",
                       value: "${user.lastDutyPeriod} год")
                   : Container(),
-              ColorButton(
-                title: "Видалити",
-                color: Colors.blue,
-                function: () async {
-                  await UserRepository().deleteUserFromDB(user);
-                  context.read<UserDialogProvider>().getUsers();
-                },
+              Row(
+                children: [
+                  Expanded(
+                    child: ColorButton(
+                      title: "Видалити",
+                      color: Colors.blue,
+                      function: () async {
+                        await UserRepository().deleteUserFromDB(user);
+                        context.read<UserDialogProvider>().getUsers();
+                      },
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: ColorButton(
+                      title: "Додати",
+                      color: Colors.blue,
+                      function: () async {
+                        await showDialog<void>(
+                          context: context,
+                          builder: (_) => ChangeNotifierProvider.value(
+                            value: context.read<UserDialogProvider>(),
+                            child: AddDutyDialog(user: user),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                ],
               )
             ],
           ),
