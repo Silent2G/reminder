@@ -40,9 +40,9 @@ class ColorButton extends StatelessWidget {
           child: Text(
             title,
             style: TextStyle(
-                fontSize: fontSize ?? 18,
+                fontSize: fontSize ?? 16,
                 fontStyle: FontStyle.normal,
-                fontWeight: FontWeight.w600),
+                fontWeight: FontWeight.w400),
           ),
         ),
       ),
